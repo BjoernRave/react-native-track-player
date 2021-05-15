@@ -1,20 +1,18 @@
-import React, { useEffect } from "react";
-import { StyleSheet, Text, View } from "react-native";
-import TrackPlayer, { usePlaybackState } from "react-native-track-player";
+import React, { useEffect } from 'react'
+import { StyleSheet, Text, View } from 'react-native'
+import TrackPlayer, { usePlaybackState } from 'react-native-track-player'
 
-import Player from "../components/Player";
-import playlistData from "../data/playlist.json";
-import localTrack from "../resources/pure.m4a";
+import Player from '../components/Player'
 
 export default function PlaylistScreen() {
-  const playbackState = usePlaybackState();
+  const playbackState = usePlaybackState()
 
   useEffect(() => {
-    setup();
-  }, []);
+    setup()
+  }, [])
 
   async function setup() {
-    await TrackPlayer.setupPlayer({});
+    await TrackPlayer.setupPlayer({})
     await TrackPlayer.updateOptions({
       stopWithApp: true,
       capabilities: [
@@ -22,34 +20,32 @@ export default function PlaylistScreen() {
         TrackPlayer.CAPABILITY_PAUSE,
         TrackPlayer.CAPABILITY_SKIP_TO_NEXT,
         TrackPlayer.CAPABILITY_SKIP_TO_PREVIOUS,
-        TrackPlayer.CAPABILITY_STOP
+        TrackPlayer.CAPABILITY_STOP,
       ],
       compactCapabilities: [
         TrackPlayer.CAPABILITY_PLAY,
-        TrackPlayer.CAPABILITY_PAUSE
-      ]
-    });
+        TrackPlayer.CAPABILITY_PAUSE,
+      ],
+    })
   }
 
   async function togglePlayback() {
-    const currentTrack = await TrackPlayer.getCurrentTrack();
+    const currentTrack = await TrackPlayer.getCurrentTrack()
     if (currentTrack == null) {
-      await TrackPlayer.reset();
-      await TrackPlayer.add(playlistData);
+      await TrackPlayer.reset()
+
       await TrackPlayer.add({
-        id: "local-track",
-        url: localTrack,
-        title: "Pure (Demo)",
-        artist: "David Chavez",
-        artwork: "https://i.picsum.photos/id/500/200/200.jpg",
-        duration: 28
-      });
-      await TrackPlayer.play();
+        id: 'local-track',
+        url: 'https://speakeroo.s3-eu-west-1.amazonaws.com/audios/.fd077a55-f49e-410a-9a6d-c444deb1b049.ogg',
+        title: 'Long Audio Test',
+        artist: 'Speakeroo',
+      })
+      await TrackPlayer.play()
     } else {
       if (playbackState === TrackPlayer.STATE_PAUSED) {
-        await TrackPlayer.play();
+        await TrackPlayer.play()
       } else {
-        await TrackPlayer.pause();
+        await TrackPlayer.pause()
       }
     }
   }
@@ -69,55 +65,55 @@ export default function PlaylistScreen() {
       />
       <Text style={styles.state}>{getStateName(playbackState)}</Text>
     </View>
-  );
+  )
 }
 
 PlaylistScreen.navigationOptions = {
-  title: "Playlist Example"
-};
+  title: 'Playlist Example',
+}
 
 function getStateName(state) {
   switch (state) {
     case TrackPlayer.STATE_NONE:
-      return "None";
+      return 'None'
     case TrackPlayer.STATE_PLAYING:
-      return "Playing";
+      return 'Playing'
     case TrackPlayer.STATE_PAUSED:
-      return "Paused";
+      return 'Paused'
     case TrackPlayer.STATE_STOPPED:
-      return "Stopped";
+      return 'Stopped'
     case TrackPlayer.STATE_BUFFERING:
-      return "Buffering";
+      return 'Buffering'
   }
 }
 
 async function skipToNext() {
   try {
-    await TrackPlayer.skipToNext();
+    await TrackPlayer.skipToNext()
   } catch (_) {}
 }
 
 async function skipToPrevious() {
   try {
-    await TrackPlayer.skipToPrevious();
+    await TrackPlayer.skipToPrevious()
   } catch (_) {}
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    backgroundColor: "#F5FCFF"
+    alignItems: 'center',
+    backgroundColor: '#F5FCFF',
   },
   description: {
-    width: "80%",
+    width: '80%',
     marginTop: 20,
-    textAlign: "center"
+    textAlign: 'center',
   },
   player: {
-    marginTop: 40
+    marginTop: 40,
   },
   state: {
-    marginTop: 20
-  }
-});
+    marginTop: 20,
+  },
+})
